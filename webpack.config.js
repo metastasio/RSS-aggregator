@@ -12,7 +12,9 @@ const config = {
   },
   devServer: {
     open: true,
-    hot: true,
+    hot: false,
+    liveReload: true,
+    watchFiles: ['dist/**/*'],
     host: 'localhost',
     static: { directory: path.resolve(__dirname, 'dist') },
   },
