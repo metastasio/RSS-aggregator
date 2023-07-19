@@ -1,12 +1,15 @@
 @import '~bootstrap/scss/bootstrap';
 
 html {
-  background: linear-gradient(45deg, #4158d0 0%, #c850c0 40%, #ffcc70 90%);
+  background-color: lightgray;
   height: 100%;
 }
 body {
   background-color: rebeccapurple;
   color: yellow;
   border-radius: 15px;
-  border: 10px dotted #8afc2d;
+  border: 2px dotted darkgray;
+}
+#hint{
+  color: rgb(200, 150, 212);
 }

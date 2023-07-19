@@ -6,17 +6,21 @@
     <title>RSS aggregator</title>
   </head>
   <body class="container">
-    <h1>Hello world!</h1>
-    <h2>Tip: Check your console</h2>
-    <div class="input-group mb-3">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="RSS Name"
-        aria-label="RSS Name"
-      />
-      <button type="button" class="btn btn-info">Info</button>
-    </div>
-    <br />
+    <h1>RSS aggregator</h1>
+    <h2>Начните читать RSS сегодня!</h2>
+    <form data-form="url" method="post">
+      <div class="input-group mb-3">
+        <input
+          name="url"
+          type="text"
+          class="form-control"
+          placeholder="RSS Name"
+          aria-label="RSS Name"
+        />
+        <button class="btn btn-info">Add new</button>
+      </div>
+    </form>
+
+    <h6 id="hint">Пример: https://news.yandex.ru/daily.rss</h6>
   </body>
 </html>
