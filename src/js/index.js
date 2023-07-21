@@ -1,12 +1,14 @@
 import '../scss/styles.scss';
 import * as yup from 'yup';
-import onChange from 'on-change';
+import isEmpty from 'lodash/isEmpty.js';
+// import onChange from 'on-change';
 
-const re =
-  /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm;
+const form = document.querySelector('form');
+const errorMessage = document.getElementById('URLValidationMessage');
+const input = document.querySelector('input');
 
 const schema = yup.object().shape({
-  website: yup.string().matches(re, 'URL is not valid'),
+  url: yup.string().url(),
 });
 
 const validate = (input) => {
@@ -20,26 +22,50 @@ const validate = (input) => {
 
 const hanleInputState = () => {};
 const render = (state) => {
+  if (state.state === 'valid') {
+    document.querySelector('form').reset();
+    input.focus();
+    input.classList.remove('is-invalid');
+    input.classList.add('is-valid');
+    errorMessage.classList.remove('invalid-feedback');
+    errorMessage.classList.add('valid-feedback');
+    errorMessage.textContent = 'RSS was added to the feed';
+  } else if (state.state === 'invalid') {
+    input.classList.remove('is-valid');
+    input.classList.add('is-invalid');
+    errorMessage.classList.remove('valid-feedback');
+    errorMessage.classList.add('invalid-feedback');
+    errorMessage.textContent = state.errors.message;
+  }
   console.log(state);
-  // console.log(state)
 };
 
 const app = () => {
-
-  const initialState = {
+  const state = {
     status: 'notSubmitted',
-    website: [],
+    feed: [],
     errors: {},
+    state: '',
   };
 
-  const state = onChange(initialState, render(initialState));
-
-  const form = document.querySelector('form');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const value = new FormData(e.target);
-    state.errors = validate(value);
-    // const objectData = Object.fromEntries(data);
+    const formData = new FormData(e.target);
+    const objectData = Object.fromEntries(formData);
+    if (state.feed.includes(formData.get('url'))) {
+      state.state = 'invalid';
+      state.errors = { message: 'Has already been added' };
+      render(state);
+    } else {
+      state.errors = validate(objectData);
+      if (isEmpty(state.errors)) {
+        state.state = 'valid';
+        state.feed.push(formData.get('url'));
+      } else {
+        state.state = 'invalid';
+      }
+      render(state);
+    }
   });
 };
 app();
