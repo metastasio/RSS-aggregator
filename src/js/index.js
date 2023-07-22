@@ -4,7 +4,7 @@ import isEmpty from 'lodash/isEmpty.js';
 // import onChange from 'on-change';
 
 const form = document.querySelector('form');
-const errorMessage = document.getElementById('URLValidationMessage');
+const errorMessage = document.querySelector('.feedback');
 const input = document.querySelector('input');
 
 const schema = yup.object().shape({
@@ -27,14 +27,14 @@ const render = (state) => {
     input.focus();
     input.classList.remove('is-invalid');
     input.classList.add('is-valid');
-    errorMessage.classList.remove('invalid-feedback');
-    errorMessage.classList.add('valid-feedback');
+    errorMessage.classList.remove('text-danger');
+    errorMessage.classList.add('text-success');
     errorMessage.textContent = 'RSS was added to the feed';
   } else if (state.state === 'invalid') {
     input.classList.remove('is-valid');
     input.classList.add('is-invalid');
-    errorMessage.classList.remove('valid-feedback');
-    errorMessage.classList.add('invalid-feedback');
+    errorMessage.classList.remove('text-success');
+    errorMessage.classList.add('text-danger');
     errorMessage.textContent = state.errors.message;
   }
   console.log(state);
@@ -50,6 +50,7 @@ const app = () => {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    console.log(errorMessage);
     const formData = new FormData(e.target);
     const objectData = Object.fromEntries(formData);
     if (state.feed.includes(formData.get('url'))) {
