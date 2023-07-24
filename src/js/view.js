@@ -5,7 +5,7 @@ const render = (path, value) => {
   if (path === 'errors') {
     errorMessage.textContent = value.message;
   } else if (path === 'state' && value === 'valid') {
-    errorMessage.textContent = 'RSS was added to the feed';
+    errorMessage.textContent = value.message;
   }
 };
 
