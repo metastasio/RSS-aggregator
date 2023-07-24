@@ -11,13 +11,22 @@
   <body class="d-flex flex-column min-vh-100">
     <main class="flex-grow-1">
       <section class="container-fluid bg-dark p-5">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button id="lng" type="button" class="btn btn-outline-secondary">
+            RU
+          </button>
+        </div>
         <div class="row">
           <div class="col-md-10 col-lg-8 mx-auto text-white">
             <h1 class="display-3 mb-0">RSS aggregator</h1>
-            <p class="lead">
-              Начните читать RSS сегодня!
-            </p>
-            <form data-form="url" method="post" action="" class="rss-form text-body" novalidate>
+            <p class="lead">Start reading RSS today!</p>
+            <form
+              data-form="url"
+              method="post"
+              action=""
+              class="rss-form text-body"
+              novalidate
+            >
               <div class="row">
                 <div class="col">
                   <div class="form-floating">
@@ -32,22 +41,23 @@
                       placeholder="RSS name"
                       autocomplete="off"
                     />
-                    <label for="url-input">RSS name</label>
+                    <label for="url-input">RSS link</label>
                   </div>
                 </div>
                 <div class="col-auto">
                   <button
+                    id="addRSS"
                     type="submit"
                     aria-label="add"
-                    class="h-100 btn btn-lg btn-primary px-sm-5"
+                    class="h-100 btn btn-lg btn-secondary px-sm-5"
                   >
                     Add new
                   </button>
                 </div>
               </div>
             </form>
-            <p class="mt-2 mb-0 text-dark-emphasis">
-              Пример: https://news.yandex.ru/daily.rss
+            <p id="example" class="mt-2 mb-0 text-dark-emphasis">
+              Example: https://news.yandex.ru/daily.rss
             </p>
             <p class="feedback m-0 position-absolute small text-danger"></p>
           </div>

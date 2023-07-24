@@ -4,7 +4,7 @@ import isEmpty from 'lodash/isEmpty.js';
 import render from './view.js';
 import onChange from 'on-change';
 import i18n from 'i18next';
-import resources from './locales.js';
+import resources from './locales/index.js';
 
 const errorMessage = document.querySelector('.feedback');
 const input = document.querySelector('input');
@@ -39,6 +39,7 @@ const app = () => {
     feed: [],
     errors: {},
     state: '',
+    lng: ''
   };
 
   const watchedState = onChange(state, render);
@@ -73,5 +74,11 @@ const app = () => {
       }
     }
   });
+
+  const lngButton = document.querySelector('#lng');
+  lngButton.addEventListener('click', () => {
+    watchedState.lng === 'eng' ? watchedState.lng = 'ru' : watchedState.lng = 'eng';
+  })
 };
 app();
+export { newInstance };
