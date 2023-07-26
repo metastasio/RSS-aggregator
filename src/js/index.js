@@ -5,6 +5,8 @@ import render from './view.js';
 import onChange from 'on-change';
 import i18n from 'i18next';
 import resources from './locales/index.js';
+import aggregator from './aggregator';
+import RSSRender from './RSSRender';
 
 const errorMessage = document.querySelector('.feedback');
 const input = document.querySelector('input');
@@ -21,7 +23,7 @@ const newInstance = i18n.createInstance(
 );
 
 const schema = yup.object().shape({
-  url: yup.string().url(),
+  url: yup.string().required().url(),
 });
 
 const validate = (input) => {
@@ -39,7 +41,7 @@ const app = () => {
     feed: [],
     errors: {},
     state: '',
-    lng: ''
+    lng: '',
   };
 
   const watchedState = onChange(state, render);
@@ -68,8 +70,13 @@ const app = () => {
         watchedState.state = 'valid';
         watchedState.feed.push(formData.get('url'));
         watchedState.errors = { message: newInstance.t('success') };
+        aggregator(formData.get('url')).then((result) => RSSRender(result));
       } else {
         watchedState.state = 'invalid';
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        errorMessage.classList.remove('text-success');
+        errorMessage.classList.add('text-danger');
         watchedState.errors = { message: newInstance.t('incorrectURL') };
       }
     }
@@ -77,8 +84,10 @@ const app = () => {
 
   const lngButton = document.querySelector('#lng');
   lngButton.addEventListener('click', () => {
-    watchedState.lng === 'eng' ? watchedState.lng = 'ru' : watchedState.lng = 'eng';
-  })
+    watchedState.lng === 'eng'
+      ? (watchedState.lng = 'ru')
+      : (watchedState.lng = 'eng');
+  });
 };
 app();
 export { newInstance };

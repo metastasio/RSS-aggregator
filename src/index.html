@@ -12,14 +12,19 @@
     <main class="flex-grow-1">
       <section class="container-fluid bg-dark p-5">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button id="lng" type="button" class="btn btn-outline-secondary">
+          <button
+            id="lng"
+            type="button"
+            class="btn btn-outline-secondary"
+            data-i18n="lngButtonText"
+          >
             RU
           </button>
         </div>
         <div class="row">
           <div class="col-md-10 col-lg-8 mx-auto text-white">
-            <h1 class="display-3 mb-0">RSS aggregator</h1>
-            <p class="lead">Start reading RSS today!</p>
+            <h1 class="display-3 mb-0" data-i18n="header">RSS aggregator</h1>
+            <p class="lead" data-i18n="desc">Start reading RSS today!</p>
             <form
               data-form="url"
               method="post"
@@ -41,22 +46,24 @@
                       placeholder="RSS name"
                       autocomplete="off"
                     />
-                    <label for="url-input">RSS link</label>
+                    <label for="url-input" data-i18n="placeholder"
+                      >RSS link</label
+                    >
                   </div>
                 </div>
                 <div class="col-auto">
                   <button
-                    id="addRSS"
                     type="submit"
                     aria-label="add"
                     class="h-100 btn btn-lg btn-secondary px-sm-5"
+                    data-i18n="addButton"
                   >
                     Add new
                   </button>
                 </div>
               </div>
             </form>
-            <p id="example" class="mt-2 mb-0 text-dark-emphasis">
+            <p class="mt-2 mb-0 text-secondary" data-i18n="example">
               Example: https://news.yandex.ru/daily.rss
             </p>
             <p class="feedback m-0 position-absolute small text-danger"></p>
@@ -66,9 +73,10 @@
       <section class="container-fluid container-xxl p-5">
         <div class="row">
           <div class="col-md-10 col-lg-8 order-1 mx-auto posts"></div>
-          <div
-            class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds"
-          ></div>
+          <div class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds">
+            <div id="feedList"class="card border-0">
+            </div>
+          </div>
         </div>
       </section>
     </main>

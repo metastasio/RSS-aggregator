@@ -9,5 +9,6 @@ export default {
     success: 'RSS добавлен в список',
     incorrectURL: 'URL должен быть валидным URL',
     double: 'Этот URL уже был добавлен в список',
+    feedTitle: 'Фиды',
   },
 };
