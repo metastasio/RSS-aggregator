@@ -1,4 +1,5 @@
 import { newInstance } from './index.js';
+import RSSRender from './RSSRender';
 
 const errorMessage = document.querySelector('.feedback');
 const interfaceLanguage = document.querySelectorAll('[data-i18n]');
@@ -17,6 +18,8 @@ const render = (path, value) => {
         item.textContent = t(item.dataset.i18n);
       });
     });
+  } else if (path === 'feedList'){
+    RSSRender(value)
   }
 };
 

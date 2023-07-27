@@ -6,7 +6,7 @@ import onChange from 'on-change';
 import i18n from 'i18next';
 import resources from './locales/index.js';
 import aggregator from './aggregator';
-import RSSRender from './RSSRender';
+// import RSSRender from './RSSRender';
 
 const errorMessage = document.querySelector('.feedback');
 const input = document.querySelector('input');
@@ -42,6 +42,8 @@ const app = () => {
     errors: {},
     state: '',
     lng: '',
+    feeds: [],
+    feedList: [],
   };
 
   const watchedState = onChange(state, render);
@@ -70,7 +72,7 @@ const app = () => {
         watchedState.state = 'valid';
         watchedState.feed.push(formData.get('url'));
         watchedState.errors = { message: newInstance.t('success') };
-        aggregator(formData.get('url')).then((result) => RSSRender(result));
+        aggregator(formData.get('url')).then((result) => watchedState.feedList.push(result));
       } else {
         watchedState.state = 'invalid';
         input.classList.remove('is-valid');
