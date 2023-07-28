@@ -1,8 +1,9 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 
 const parser = new DOMParser();
 
 const aggregator = (url) => {
+  console.log();
   return fetch(
     `https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`,
   )
@@ -12,6 +13,10 @@ const aggregator = (url) => {
     })
     .then((data) => {
       const parsed = parser.parseFromString(data.contents, 'application/xml');
+
+      if (parsed.querySelector('parsererror')) {
+        return { message: "This URL doesn't contain any RSS" };
+      }
       const titleElement = parsed.querySelector('title');
       const title = titleElement.textContent;
       const descriptionElement = parsed.querySelector('description');
@@ -24,7 +29,6 @@ const aggregator = (url) => {
         items.push({
           title: title.innerHTML,
           link: link.innerHTML,
-          id: _.uniqueId(),
         });
       });
 
@@ -32,11 +36,9 @@ const aggregator = (url) => {
         feed: {
           title: title,
           description: description,
-          id: _.uniqueId(),
         },
         items: items,
       };
-      // return itemTags;
     });
 };
 export default aggregator;

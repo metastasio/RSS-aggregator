@@ -8,10 +8,10 @@ const langMap = { ru: 'en', eng: 'ru' };
 
 const render = (path, value) => {
   if (path === 'errors') {
+    console.log(value)
     errorMessage.textContent = value.message;
   } else if (path === 'state' && value === 'valid') {
     errorMessage.textContent = value.message;
-    // console.log(watchedState)
   } else if (path === 'lng') {
     newInstance.changeLanguage(langMap[value]).then((t) => {
       interfaceLanguage.forEach((item) => {

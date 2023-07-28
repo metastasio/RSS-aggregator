@@ -62,17 +62,23 @@ const app = () => {
       watchedState.errors = { message: newInstance.t('double') };
     } else {
       watchedState.errors = validate(objectData);
-      if (isEmpty(state.errors)) {
-        document.querySelector('form').reset();
-        input.focus();
-        input.classList.remove('is-invalid');
-        input.classList.add('is-valid');
-        errorMessage.classList.remove('text-danger');
-        errorMessage.classList.add('text-success');
-        watchedState.state = 'valid';
-        watchedState.feed.push(formData.get('url'));
-        watchedState.errors = { message: newInstance.t('success') };
-        aggregator(formData.get('url')).then((result) => watchedState.feedList.push(result));
+      if (isEmpty(watchedState.errors)) {
+        aggregator(formData.get('url')).then((result) => {
+          if (result.message) {
+            watchedState.errors = result;
+          } else {
+            document.querySelector('form').reset();
+            input.focus();
+            input.classList.remove('is-invalid');
+            input.classList.add('is-valid');
+            errorMessage.classList.remove('text-danger');
+            errorMessage.classList.add('text-success');
+            watchedState.state = 'valid';
+            watchedState.feed.push(formData.get('url'));
+            watchedState.errors = { message: newInstance.t('success') };
+            watchedState.feedList.push(result);
+          }
+        });
       } else {
         watchedState.state = 'invalid';
         input.classList.remove('is-valid');
