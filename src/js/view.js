@@ -3,12 +3,33 @@ import RSSRender from './RSSRender';
 
 const errorMessage = document.querySelector('.feedback');
 const interfaceLanguage = document.querySelectorAll('[data-i18n]');
+const sumbitButton = document.querySelector('#submitButton');
 
 const langMap = { ru: 'en', eng: 'ru' };
 
 const render = (path, value) => {
+  // switch (path) {
+  //   case 'errors':
+  //     errorMessage.textContent = value.message;
+    // case 'state':
+    //   if (value === 'valid') {
+    //     errorMessage.textContent = value.message;
+    //   }
+    // case 'lng':
+    //   newInstance.changeLanguage(langMap[value]).then((t) => {
+    //     interfaceLanguage.forEach((item) => {
+    //       item.textContent = t(item.dataset.i18n);
+    //     });
+    //   });
+    // case 'feedList':
+    //   RSSRender(value);
+    // case 'status':
+    //   value === 'pending'
+    //     ? sumbitButton.setAttribute('disabled', true)
+    //     : sumbitButton.removeAttribute('disabled');
+  // }
+
   if (path === 'errors') {
-    console.log(value)
     errorMessage.textContent = value.message;
   } else if (path === 'state' && value === 'valid') {
     errorMessage.textContent = value.message;
@@ -18,8 +39,12 @@ const render = (path, value) => {
         item.textContent = t(item.dataset.i18n);
       });
     });
-  } else if (path === 'feedList'){
-    RSSRender(value)
+  } else if (path === 'feedList') {
+    RSSRender(value);
+  } else if (path === 'status') {
+    value === 'pending'
+      ? sumbitButton.setAttribute('disabled', true)
+      : sumbitButton.removeAttribute('disabled');
   }
 };
 

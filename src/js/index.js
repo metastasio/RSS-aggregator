@@ -6,7 +6,6 @@ import onChange from 'on-change';
 import i18n from 'i18next';
 import resources from './locales/index.js';
 import aggregator from './aggregator';
-// import RSSRender from './RSSRender';
 
 const errorMessage = document.querySelector('.feedback');
 const input = document.querySelector('input');
@@ -63,22 +62,27 @@ const app = () => {
     } else {
       watchedState.errors = validate(objectData);
       if (isEmpty(watchedState.errors)) {
-        aggregator(formData.get('url')).then((result) => {
-          if (result.message) {
-            watchedState.errors = result;
-          } else {
-            document.querySelector('form').reset();
-            input.focus();
-            input.classList.remove('is-invalid');
-            input.classList.add('is-valid');
-            errorMessage.classList.remove('text-danger');
-            errorMessage.classList.add('text-success');
-            watchedState.state = 'valid';
-            watchedState.feed.push(formData.get('url'));
-            watchedState.errors = { message: newInstance.t('success') };
-            watchedState.feedList.push(result);
-          }
-        });
+        watchedState.status = 'pending';
+        aggregator(formData.get('url'))
+          .then((result) => {
+            if (result.message) {
+              watchedState.errors = result;
+              watchedState.status = 'notSubmitted';
+            } else {
+              document.querySelector('form').reset();
+              input.focus();
+              input.classList.remove('is-invalid');
+              input.classList.add('is-valid');
+              errorMessage.classList.remove('text-danger');
+              errorMessage.classList.add('text-success');
+              watchedState.state = 'valid';
+              watchedState.feed.push(formData.get('url'));
+              watchedState.errors = { message: newInstance.t('success') };
+              watchedState.feedList.push(result);
+              watchedState.status = 'notSubmitted';
+            }
+          })
+          .catch(() => (watchedState.errors = 'Network error'));
       } else {
         watchedState.state = 'invalid';
         input.classList.remove('is-valid');
