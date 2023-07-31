@@ -28,24 +28,23 @@ const RSSRender = (data) => {
   contentList.append(div2);
   const ul2 = document.createElement('ul');
   ul2.classList.add('list-group', 'border-0', 'rounded-0');
-  
+
   data.forEach((feed) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'border-0', 'border-end-0');
     const h3 = document.createElement('h3');
     h3.classList.add('h6', 'm-0');
     h3.setAttribute('data-id', _.uniqueId());
-    h3.textContent = feed.feed.title;
+    h3.textContent = feed.title;
     const p = document.createElement('p');
     p.classList.add('m-0', 'small', 'text-black-50');
-    p.textContent = feed.feed.description;
+    p.textContent = feed.description;
     li.append(h3);
     li.append(p);
     ul.prepend(li);
     feedList.append(ul);
 
     const posts = feed.items;
-    posts.forEach((b) => console.log(b.title));
     posts.forEach((item) => {
       const id = _.uniqueId();
       const li = document.createElement('li');

@@ -1,9 +1,7 @@
-// import _ from 'lodash';
-
 const parser = new DOMParser();
 
 const aggregator = (url) => {
-  console.log();
+  // console.log();
   return fetch(
     `https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`,
   )
@@ -33,10 +31,9 @@ const aggregator = (url) => {
       });
 
       return {
-        feed: {
-          title: title,
-          description: description,
-        },
+        title: title,
+        description: description,
+        link: url,
         items: items,
       };
     });

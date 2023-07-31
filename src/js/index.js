@@ -6,6 +6,8 @@ import onChange from 'on-change';
 import i18n from 'i18next';
 import resources from './locales/index.js';
 import aggregator from './aggregator';
+import update from './RSSUpdate.js';
+import _ from 'lodash';
 
 const errorMessage = document.querySelector('.feedback');
 const input = document.querySelector('input');
@@ -41,7 +43,7 @@ const app = () => {
     errors: {},
     state: '',
     lng: '',
-    feeds: [],
+    // feeds: [],
     feedList: [],
   };
 
@@ -51,8 +53,9 @@ const app = () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const URL = formData.get('url');
     const objectData = Object.fromEntries(formData);
-    if (watchedState.feed.includes(formData.get('url'))) {
+    if (watchedState.feed.includes(URL)) {
       input.classList.remove('is-valid');
       input.classList.add('is-invalid');
       errorMessage.classList.remove('text-success');
@@ -63,12 +66,20 @@ const app = () => {
       watchedState.errors = validate(objectData);
       if (isEmpty(watchedState.errors)) {
         watchedState.status = 'pending';
-        aggregator(formData.get('url'))
+        aggregator(URL)
           .then((result) => {
             if (result.message) {
               watchedState.errors = result;
               watchedState.status = 'notSubmitted';
             } else {
+              const feedID = _.uniqueId();
+              const formattedResult = {
+                ...result,
+                id: feedID,
+                items: result.items.map((item) => {
+                  return { ...item, feedID: feedID, postID: _.uniqueId() };
+                }),
+              };
               document.querySelector('form').reset();
               input.focus();
               input.classList.remove('is-invalid');
@@ -76,10 +87,14 @@ const app = () => {
               errorMessage.classList.remove('text-danger');
               errorMessage.classList.add('text-success');
               watchedState.state = 'valid';
-              watchedState.feed.push(formData.get('url'));
+              watchedState.feed.push(URL);
               watchedState.errors = { message: newInstance.t('success') };
-              watchedState.feedList.push(result);
+              watchedState.feedList.push(formattedResult);
               watchedState.status = 'notSubmitted';
+              // let timerId = setTimeout(function tick() {
+              //   update(watchedState);
+              //   timerId = setTimeout(tick, 5000);
+              // }, 5000);
             }
           })
           .catch(() => (watchedState.errors = 'Network error'));
