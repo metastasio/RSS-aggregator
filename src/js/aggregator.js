@@ -1,9 +1,10 @@
 const parser = new DOMParser();
 
 const aggregator = (url) => {
-  // console.log();
   return fetch(
-    `https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`,
+    `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(
+      url,
+    )}`,
   )
     .then((response) => {
       if (response.ok) return response.json();
@@ -20,21 +21,20 @@ const aggregator = (url) => {
       const descriptionElement = parsed.querySelector('description');
       const description = descriptionElement.textContent;
       const itemTags = parsed.querySelectorAll('item');
-      const items = [];
-      itemTags.forEach((item) => {
+      const items = [...itemTags].map((item) => {
         const title = item.querySelector('title');
         const link = item.querySelector('link');
-        items.push({
+        return {
           title: title.innerHTML,
           link: link.innerHTML,
-        });
+        };
       });
 
       return {
-        title: title,
-        description: description,
+        title,
+        description,
         link: url,
-        items: items,
+        items,
       };
     });
 };

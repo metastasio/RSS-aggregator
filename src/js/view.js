@@ -8,7 +8,7 @@ const sumbitButton = document.querySelector('#submitButton');
 
 const langMap = { ru: 'en', eng: 'ru' };
 
-const render = (path, value) => {
+const render = (path, value, prev) => {
   // switch (path) {
   //   case 'errors':
   //     errorMessage.textContent = value.message;
@@ -40,11 +40,10 @@ const render = (path, value) => {
         item.textContent = t(item.dataset.i18n);
       });
     });
-  } else if (path.startsWith('feedList')) {
-    // console.log(value);
+  } else if (path === 'feedList') {
     renderRSSFeed(value);
+  } else if (path === 'feedListItems') {
     renderRSSPosts(value);
-    // RSSRender(value);
   } else if (path === 'status') {
     value === 'pending'
       ? sumbitButton.setAttribute('disabled', true)

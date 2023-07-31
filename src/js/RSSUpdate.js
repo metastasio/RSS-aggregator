@@ -1,12 +1,16 @@
 import aggregator from './aggregator';
+import _ from 'lodash';
 
 const update = (watchedState) => {
   watchedState.feed.forEach((URL) =>
     aggregator(URL).then((result) => {
       const getCorrectFeed = (element) => element.link === URL;
-      const correctFeed = watchedState.feedList.findIndex(getCorrectFeed);
-      watchedState.feedList[correctFeed].items = [];
-      watchedState.feedList[correctFeed].items.push(result.items);
+      const correctFeed = watchedState.feedList.find(getCorrectFeed);
+      const filteredItems = _.differenceBy(result.items, watchedState.feedListItems, 'title');
+      const newItems = filteredItems.map((item) => {
+        return { ...item, feedID: correctFeed.id, postID: _.uniqueId() };
+      });
+      watchedState.feedListItems.push(...newItems);
     }),
   );
 };

@@ -45,6 +45,7 @@ const app = () => {
     lng: '',
     // feeds: [],
     feedList: [],
+    feedListItems: [],
   };
 
   const watchedState = onChange(state, render);
@@ -73,13 +74,14 @@ const app = () => {
               watchedState.status = 'notSubmitted';
             } else {
               const feedID = _.uniqueId();
+              const { items, ...rest } = result;
               const formattedResult = {
-                ...result,
+                ...rest,
                 id: feedID,
-                items: result.items.map((item) => {
-                  return { ...item, feedID: feedID, postID: _.uniqueId() };
-                }),
               };
+              watchedState.feedListItems = items.map((item) => {
+                return { ...item, feedID: feedID, postID: _.uniqueId() };
+              });
               document.querySelector('form').reset();
               input.focus();
               input.classList.remove('is-invalid');
@@ -91,10 +93,10 @@ const app = () => {
               watchedState.errors = { message: newInstance.t('success') };
               watchedState.feedList.push(formattedResult);
               watchedState.status = 'notSubmitted';
-              // let timerId = setTimeout(function tick() {
-              //   update(watchedState);
-              //   timerId = setTimeout(tick, 5000);
-              // }, 5000);
+              let timerId = setTimeout(function tick() {
+                update(watchedState);
+                timerId = setTimeout(tick, 5000);
+              }, 5000);
             }
           })
           .catch(() => (watchedState.errors = 'Network error'));
