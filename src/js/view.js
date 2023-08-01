@@ -1,5 +1,5 @@
 import { newInstance } from './index.js';
-import { renderRSSFeed, renderRSSPosts } from './RenderRssFeed.js';
+import { renderRSSFeed, renderRSSPosts } from './renderRssFeed.js';
 
 const body = document.querySelector('body');
 const errorMessage = document.querySelector('.feedback');
