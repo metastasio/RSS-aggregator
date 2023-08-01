@@ -1,10 +1,11 @@
 import { newInstance } from './index.js';
-// import RSSRender from './RSSRender';
 import { renderRSSFeed, renderRSSPosts } from './RenderRssFeed.js';
 
+const body = document.querySelector('body');
 const errorMessage = document.querySelector('.feedback');
 const interfaceLanguage = document.querySelectorAll('[data-i18n]');
 const sumbitButton = document.querySelector('#submitButton');
+const input = document.querySelector('input');
 
 const langMap = { ru: 'en', eng: 'ru' };
 
@@ -44,6 +45,8 @@ const render = (path, value, prev) => {
     renderRSSFeed(value);
   } else if (path === 'feedListItems') {
     renderRSSPosts(value);
+  } else if (path === 'feedListItems') {
+    console.log('KEKEKEKEk');
   } else if (path === 'status') {
     value === 'pending'
       ? sumbitButton.setAttribute('disabled', true)

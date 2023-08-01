@@ -5,7 +5,7 @@ import render from './view.js';
 import onChange from 'on-change';
 import i18n from 'i18next';
 import resources from './locales/index.js';
-import aggregator from './aggregator';
+import aggregator from './aggregator.js';
 import update from './RSSUpdate.js';
 import _ from 'lodash';
 
@@ -43,7 +43,6 @@ const app = () => {
     errors: {},
     state: '',
     lng: '',
-    // feeds: [],
     feedList: [],
     feedListItems: [],
   };
@@ -99,7 +98,7 @@ const app = () => {
               }, 5000);
             }
           })
-          .catch(() => (watchedState.errors = 'Network error'));
+          // .catch(() => (watchedState.errors = 'Network error'));
       } else {
         watchedState.state = 'invalid';
         input.classList.remove('is-valid');

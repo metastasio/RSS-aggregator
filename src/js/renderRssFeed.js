@@ -20,7 +20,7 @@ const renderRSSFeed = (state) => {
     li.classList.add('list-group-item', 'border-0', 'border-end-0');
     const h3 = document.createElement('h3');
     h3.classList.add('h6', 'm-0');
-    // h3.setAttribute('data-id', _.uniqueId());
+    h3.setAttribute('data-id', feed.id);
     h3.textContent = feed.title;
     const p = document.createElement('p');
     p.classList.add('m-0', 'small', 'text-black-50');
@@ -33,6 +33,7 @@ const renderRSSFeed = (state) => {
 };
 
 const renderRSSPosts = (state) => {
+  console.log(state, 'POSTS');
   const contentList = document.querySelector('#contentList');
   contentList.innerHTML = '';
 
@@ -60,7 +61,7 @@ const renderRSSPosts = (state) => {
     const a = document.createElement('a');
     a.setAttribute('href', item.link);
     a.classList.add('fw-bold');
-    // a.setAttribute('data-id', id);
+    a.setAttribute('data-post-id', item.postID);
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
     a.textContent = item.title;
@@ -68,7 +69,7 @@ const renderRSSPosts = (state) => {
     const button = document.createElement('button');
     button.setAttribute('type', 'button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    // button.setAttribute('data-id', id);
+    button.setAttribute('data-post-id', item.postID);
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
     button.setAttribute('data-i18n', 'postButton');
@@ -76,6 +77,13 @@ const renderRSSPosts = (state) => {
     li2.append(button);
     ul2.prepend(li2);
     contentList.append(ul2);
+
+    button.addEventListener('click', (e) => {
+      const targetPostID = e.target.getAttribute('data-post-id');
+      const getCorrectPost = (item) => item.postID === targetPostID;
+      const targetPostIndex = state.findIndex(getCorrectPost);
+      state[targetPostIndex].status = 'open';
+    });
   });
 };
 export { renderRSSFeed, renderRSSPosts };
