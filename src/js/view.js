@@ -1,36 +1,14 @@
 import { newInstance } from './index.js';
 import { renderRSSFeed, renderRSSPosts } from './renderRssFeed.js';
 
-const body = document.querySelector('body');
 const errorMessage = document.querySelector('.feedback');
 const interfaceLanguage = document.querySelectorAll('[data-i18n]');
 const sumbitButton = document.querySelector('#submitButton');
-const input = document.querySelector('input');
+// const input = document.querySelector('input');
 
 const langMap = { ru: 'en', eng: 'ru' };
 
-const render = (path, value, prev) => {
-  // switch (path) {
-  //   case 'errors':
-  //     errorMessage.textContent = value.message;
-  // case 'state':
-  //   if (value === 'valid') {
-  //     errorMessage.textContent = value.message;
-  //   }
-  // case 'lng':
-  //   newInstance.changeLanguage(langMap[value]).then((t) => {
-  //     interfaceLanguage.forEach((item) => {
-  //       item.textContent = t(item.dataset.i18n);
-  //     });
-  //   });
-  // case 'feedList':
-  //   RSSRender(value);
-  // case 'status':
-  //   value === 'pending'
-  //     ? sumbitButton.setAttribute('disabled', true)
-  //     : sumbitButton.removeAttribute('disabled');
-  // }
-
+const render = (path, value, watchedState) => {
   if (path === 'errors') {
     errorMessage.textContent = value.message;
   } else if (path === 'state' && value === 'valid') {
@@ -43,10 +21,14 @@ const render = (path, value, prev) => {
     });
   } else if (path === 'feedList') {
     renderRSSFeed(value);
-  } else if (path === 'feedListItems') {
-    renderRSSPosts(value);
-  } else if (path === 'feedListItems') {
-    console.log('KEKEKEKEk');
+  } else if (path === 'feedListItems' || path === 'openPost') {
+    console.log(watchedState.openPost);
+    renderRSSPosts(watchedState.feedListItems);
+    watchedState.openPost.forEach((item) => {
+      const openedPost = document.querySelector(`[data-post-id="${item}"]`);
+      openedPost.classList.remove('fw-bold');
+      openedPost.classList.add('fw-normal');
+    });
   } else if (path === 'status') {
     value === 'pending'
       ? sumbitButton.setAttribute('disabled', true)

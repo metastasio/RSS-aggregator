@@ -12,7 +12,7 @@ const aggregator = (url) => {
     })
     .then((data) => {
       const parsed = parser.parseFromString(data.contents, 'application/xml');
-
+      
       if (parsed.querySelector('parsererror')) {
         return { message: "This URL doesn't contain any RSS" };
       }
@@ -24,9 +24,11 @@ const aggregator = (url) => {
       const items = [...itemTags].map((item) => {
         const title = item.querySelector('title');
         const link = item.querySelector('link');
+        const description = item.querySelector('description');
         return {
           title: title.innerHTML,
           link: link.innerHTML,
+          description: description.innerHTML,
         };
       });
 

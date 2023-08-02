@@ -1,4 +1,5 @@
 import '../scss/styles.scss';
+import 'bootstrap/js/dist/modal.js';
 import * as yup from 'yup';
 import isEmpty from 'lodash/isEmpty.js';
 import render from './view.js';
@@ -45,9 +46,12 @@ const app = () => {
     lng: '',
     feedList: [],
     feedListItems: [],
+    openPost: [],
   };
 
-  const watchedState = onChange(state, render);
+  const watchedState = onChange(state, (path, value) => {
+    render(path, value, watchedState);
+  });
 
   const form = document.querySelector('form');
   form.addEventListener('submit', (e) => {
@@ -60,6 +64,7 @@ const app = () => {
       input.classList.add('is-invalid');
       errorMessage.classList.remove('text-success');
       errorMessage.classList.add('text-danger');
+
       watchedState.state = 'invalid';
       watchedState.errors = { message: newInstance.t('double') };
     } else {
@@ -70,6 +75,7 @@ const app = () => {
           .then((result) => {
             if (result.message) {
               watchedState.errors = result;
+              watchedState.state = 'invalid';
               watchedState.status = 'notSubmitted';
             } else {
               const feedID = _.uniqueId();
@@ -87,6 +93,7 @@ const app = () => {
               input.classList.add('is-valid');
               errorMessage.classList.remove('text-danger');
               errorMessage.classList.add('text-success');
+
               watchedState.state = 'valid';
               watchedState.feed.push(URL);
               watchedState.errors = { message: newInstance.t('success') };
@@ -98,13 +105,14 @@ const app = () => {
               }, 5000);
             }
           })
-          // .catch(() => (watchedState.errors = 'Network error'));
+          .catch(() => (watchedState.errors = 'Network error'));
       } else {
-        watchedState.state = 'invalid';
         input.classList.remove('is-valid');
         input.classList.add('is-invalid');
         errorMessage.classList.remove('text-success');
         errorMessage.classList.add('text-danger');
+
+        watchedState.state = 'invalid';
         watchedState.errors = { message: newInstance.t('incorrectURL') };
       }
     }
@@ -115,6 +123,27 @@ const app = () => {
     watchedState.lng === 'eng'
       ? (watchedState.lng = 'ru')
       : (watchedState.lng = 'eng');
+  });
+
+  const modal = document.getElementById('modal');
+  modal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+
+    const title = button.getAttribute('data-bs-title');
+    const link = button.getAttribute('data-bs-link');
+    const description = button.getAttribute('data-bs-description');
+    const id = button.getAttribute('data-post-id');
+
+    const modalTitle = modal.querySelector('.modal-title');
+    const modalBody = modal.querySelector('.modal-body');
+    const modalFooter = modal.querySelector('.modal-footer');
+    const modalFooterLink = modalFooter.querySelector('a');
+    modalFooterLink.setAttribute('href', link);
+    modalTitle.textContent = title;
+    modalBody.textContent = description;
+
+    watchedState.openPost.push(id);
+    console.log(id);
   });
 };
 app();

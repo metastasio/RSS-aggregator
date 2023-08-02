@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const renderRSSFeed = (state) => {
   const feedList = document.querySelector('#feedList');
   feedList.innerHTML = '';
@@ -33,7 +31,6 @@ const renderRSSFeed = (state) => {
 };
 
 const renderRSSPosts = (state) => {
-  console.log(state, 'POSTS');
   const contentList = document.querySelector('#contentList');
   contentList.innerHTML = '';
 
@@ -73,17 +70,13 @@ const renderRSSPosts = (state) => {
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
     button.setAttribute('data-i18n', 'postButton');
+    button.setAttribute('data-bs-title', item.title);
+    button.setAttribute('data-bs-link', item.link);
+    button.setAttribute('data-bs-description', item.description);
     button.textContent = 'Read';
     li2.append(button);
     ul2.prepend(li2);
     contentList.append(ul2);
-
-    button.addEventListener('click', (e) => {
-      const targetPostID = e.target.getAttribute('data-post-id');
-      const getCorrectPost = (item) => item.postID === targetPostID;
-      const targetPostIndex = state.findIndex(getCorrectPost);
-      state[targetPostIndex].status = 'open';
-    });
   });
 };
 export { renderRSSFeed, renderRSSPosts };
