@@ -9,9 +9,6 @@ import aggregator from './aggregator.js';
 import update from './RSSUpdate.js';
 import _ from 'lodash';
 
-const errorMessage = document.querySelector('.feedback');
-const input = document.querySelector('input');
-
 const newInstance = i18n.createInstance(
   {
     lng: 'ru',
@@ -22,22 +19,6 @@ const newInstance = i18n.createInstance(
     if (err) return console.log('something went wrong loading', err);
   },
 );
-
-const schema = yup.object().shape({
-  url: yup
-    .string(newInstance.t('incorrectURL'))
-    .required(newInstance.t('empty'))
-    .url(newInstance.t('incorrectURL')),
-});
-
-const validate = (input) => {
-  try {
-    schema.validateSync(input, { abortEarly: false });
-    return {};
-  } catch (e) {
-    return e;
-  }
-};
 
 const app = () => {
   const state = {
@@ -55,19 +36,34 @@ const app = () => {
     render(path, value, watchedState);
   });
 
+  const schema = yup.object().shape({
+    url: yup
+      .string(newInstance.t('incorrectURL'))
+      .required(newInstance.t('empty'))
+      .url(newInstance.t('incorrectURL'))
+      .notOneOf(watchedState.feed, newInstance.t('double')),
+  });
+
+  const validate = (input) => {
+    try {
+      schema.validateSync(input, { abortEarly: false });
+      return {};
+    } catch (e) {
+      return e;
+    }
+  };
+
   const form = document.querySelector('form');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const URL = formData.get('url');
     const objectData = Object.fromEntries(formData);
-    if (watchedState.feed.includes(URL)) {
-      ///
-      watchedState.state = 'invalid';
-      watchedState.errors = { message: newInstance.t('double') };
-    } else {
-      watchedState.errors = validate(objectData);
-      if (_.isEmpty(watchedState.errors)) {
+
+
+    const validation = validate(objectData);
+    switch (_.isEmpty(validation)) {
+      case true:
         watchedState.status = 'pending';
         aggregator(URL)
           .then((result) => {
@@ -76,10 +72,12 @@ const app = () => {
               watchedState.state = 'invalid';
               watchedState.status = 'notSubmitted';
             } else {
+              watchedState.feed.push(URL);
               watchedState.state = 'valid';
               watchedState.status = 'notSubmitted';
               const feedID = _.uniqueId();
               const { items, ...rest } = result;
+              console.log(watchedState);
               const formattedResult = {
                 ...rest,
                 id: feedID,
@@ -87,8 +85,6 @@ const app = () => {
               watchedState.feedListItems = items.map((item) => {
                 return { ...item, feedID: feedID, postID: _.uniqueId() };
               });
-              ///
-              watchedState.feed.push(URL);
               watchedState.feedList.push(formattedResult);
               let timerId = setTimeout(function tick() {
                 update(watchedState);
@@ -97,11 +93,9 @@ const app = () => {
             }
           })
           .catch(() => (watchedState.errors = 'Network error'));
-      } else {
-        ///
+      case false:
         watchedState.state = 'invalid';
-        watchedState.errors = { message: newInstance.t('incorrectURL') };
-      }
+        watchedState.errors = validation;
     }
   });
 

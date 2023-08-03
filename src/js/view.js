@@ -14,7 +14,6 @@ const render = (path, value, watchedState) => {
     input.classList.add('is-invalid');
     errorMessage.classList.remove('text-success');
     errorMessage.classList.add('text-danger');
-
     errorMessage.textContent = value.message;
   } else if (path === 'state' && value === 'valid') {
     document.querySelector('form').reset();

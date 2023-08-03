@@ -30,7 +30,9 @@ const aggregator = (url) => {
         return {
           title: title.innerHTML,
           link: link.innerHTML,
-          description: description.innerHTML,
+          description: description.innerHTML
+            .trim()
+            .replace(/^(\/\/\s*)?<!\[CDATA\[|(\/\/\s*)?\]\]>$/g, ''),
         };
       });
 
