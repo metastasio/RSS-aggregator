@@ -1,3 +1,5 @@
+import { newInstance } from './index.js';
+
 const parser = new DOMParser();
 
 const aggregator = (url) => {
@@ -12,9 +14,9 @@ const aggregator = (url) => {
     })
     .then((data) => {
       const parsed = parser.parseFromString(data.contents, 'application/xml');
-      
+
       if (parsed.querySelector('parsererror')) {
-        return { message: "This URL doesn't contain any RSS" };
+        return { message: newInstance.t('noRSS') };
       }
       const titleElement = parsed.querySelector('title');
       const title = titleElement.textContent;

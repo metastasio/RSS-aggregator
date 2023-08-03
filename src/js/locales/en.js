@@ -14,5 +14,7 @@ export default {
     postButton: 'Read',
     close: 'Close',
     link: 'Read',
+    empty: 'This field must not be empty',
+    noRSS: "This link doesn't contain any RSS",
   },
 };

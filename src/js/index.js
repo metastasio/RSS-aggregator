@@ -24,7 +24,10 @@ const newInstance = i18n.createInstance(
 );
 
 const schema = yup.object().shape({
-  url: yup.string().required().url(),
+  url: yup
+    .string(newInstance.t('incorrectURL'))
+    .required(newInstance.t('empty'))
+    .url(newInstance.t('incorrectURL')),
 });
 
 const validate = (input) => {
@@ -42,7 +45,7 @@ const app = () => {
     feed: [],
     errors: {},
     state: '',
-    lng: '',
+    lng: 'ru',
     feedList: [],
     feedListItems: [],
     openPost: [],
@@ -59,11 +62,7 @@ const app = () => {
     const URL = formData.get('url');
     const objectData = Object.fromEntries(formData);
     if (watchedState.feed.includes(URL)) {
-      input.classList.remove('is-valid');
-      input.classList.add('is-invalid');
-      errorMessage.classList.remove('text-success');
-      errorMessage.classList.add('text-danger');
-
+      ///
       watchedState.state = 'invalid';
       watchedState.errors = { message: newInstance.t('double') };
     } else {
@@ -78,6 +77,7 @@ const app = () => {
               watchedState.status = 'notSubmitted';
             } else {
               watchedState.state = 'valid';
+              watchedState.status = 'notSubmitted';
               const feedID = _.uniqueId();
               const { items, ...rest } = result;
               const formattedResult = {
@@ -87,17 +87,9 @@ const app = () => {
               watchedState.feedListItems = items.map((item) => {
                 return { ...item, feedID: feedID, postID: _.uniqueId() };
               });
-              document.querySelector('form').reset();
-              input.focus();
-              input.classList.remove('is-invalid');
-              input.classList.add('is-valid');
-              errorMessage.classList.remove('text-danger');
-              errorMessage.classList.add('text-success');
-
+              ///
               watchedState.feed.push(URL);
-              watchedState.errors = { message: newInstance.t('success') };
               watchedState.feedList.push(formattedResult);
-              watchedState.status = 'notSubmitted';
               let timerId = setTimeout(function tick() {
                 update(watchedState);
                 timerId = setTimeout(tick, 5000);
@@ -106,11 +98,7 @@ const app = () => {
           })
           .catch(() => (watchedState.errors = 'Network error'));
       } else {
-        input.classList.remove('is-valid');
-        input.classList.add('is-invalid');
-        errorMessage.classList.remove('text-success');
-        errorMessage.classList.add('text-danger');
-
+        ///
         watchedState.state = 'invalid';
         watchedState.errors = { message: newInstance.t('incorrectURL') };
       }
@@ -119,9 +107,9 @@ const app = () => {
 
   const lngButton = document.querySelector('#lng');
   lngButton.addEventListener('click', () => {
-    watchedState.lng === 'ru'
-      ? (watchedState.lng = 'eng')
-      : (watchedState.lng = 'ru');
+    watchedState.lng === 'eng'
+      ? (watchedState.lng = 'ru')
+      : (watchedState.lng = 'eng');
   });
 
   const modal = document.getElementById('modal');
