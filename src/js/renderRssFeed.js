@@ -1,3 +1,5 @@
+import { newInstance } from './index.js';
+
 const renderRSSFeed = (state) => {
   const feedList = document.querySelector('#feedList');
   feedList.innerHTML = '';
@@ -7,7 +9,7 @@ const renderRSSFeed = (state) => {
   const h2 = document.createElement('h2');
   h2.classList.add('card-title', 'h4');
   h2.setAttribute('data-i18n', 'feedTitle');
-  h2.textContent = 'Feed';
+  h2.textContent = newInstance.t('feedTitle');
   div.append(h2);
   feedList.append(div);
   const ul = document.createElement('ul');
@@ -39,7 +41,7 @@ const renderRSSPosts = (state) => {
   const h2Posts = document.createElement('h2');
   h2Posts.classList.add('card-title', 'h4');
   h2Posts.setAttribute('data-i18n', 'postsTitles');
-  h2Posts.textContent = 'Posts';
+  h2Posts.textContent = newInstance.t('postsTitles');
   div2.append(h2Posts);
   contentList.append(div2);
   const ul2 = document.createElement('ul');
@@ -73,7 +75,7 @@ const renderRSSPosts = (state) => {
     button.setAttribute('data-bs-title', item.title);
     button.setAttribute('data-bs-link', item.link);
     button.setAttribute('data-bs-description', item.description);
-    button.textContent = 'Read';
+    button.textContent = newInstance.t('postButton');
     li2.append(button);
     ul2.prepend(li2);
     contentList.append(ul2);

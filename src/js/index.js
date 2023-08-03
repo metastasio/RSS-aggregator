@@ -1,7 +1,6 @@
 import '../scss/styles.scss';
 import 'bootstrap/js/dist/modal.js';
 import * as yup from 'yup';
-import isEmpty from 'lodash/isEmpty.js';
 import render from './view.js';
 import onChange from 'on-change';
 import i18n from 'i18next';
@@ -15,11 +14,11 @@ const input = document.querySelector('input');
 
 const newInstance = i18n.createInstance(
   {
-    lng: 'en',
+    lng: 'ru',
     debug: true,
     resources,
   },
-  (err, t) => {
+  (err) => {
     if (err) return console.log('something went wrong loading', err);
   },
 );
@@ -69,7 +68,7 @@ const app = () => {
       watchedState.errors = { message: newInstance.t('double') };
     } else {
       watchedState.errors = validate(objectData);
-      if (isEmpty(watchedState.errors)) {
+      if (_.isEmpty(watchedState.errors)) {
         watchedState.status = 'pending';
         aggregator(URL)
           .then((result) => {
@@ -78,6 +77,7 @@ const app = () => {
               watchedState.state = 'invalid';
               watchedState.status = 'notSubmitted';
             } else {
+              watchedState.state = 'valid';
               const feedID = _.uniqueId();
               const { items, ...rest } = result;
               const formattedResult = {
@@ -94,7 +94,6 @@ const app = () => {
               errorMessage.classList.remove('text-danger');
               errorMessage.classList.add('text-success');
 
-              watchedState.state = 'valid';
               watchedState.feed.push(URL);
               watchedState.errors = { message: newInstance.t('success') };
               watchedState.feedList.push(formattedResult);
@@ -120,20 +119,18 @@ const app = () => {
 
   const lngButton = document.querySelector('#lng');
   lngButton.addEventListener('click', () => {
-    watchedState.lng === 'eng'
-      ? (watchedState.lng = 'ru')
-      : (watchedState.lng = 'eng');
+    watchedState.lng === 'ru'
+      ? (watchedState.lng = 'eng')
+      : (watchedState.lng = 'ru');
   });
 
   const modal = document.getElementById('modal');
   modal.addEventListener('show.bs.modal', function (event) {
     const button = event.relatedTarget;
-
     const title = button.getAttribute('data-bs-title');
     const link = button.getAttribute('data-bs-link');
     const description = button.getAttribute('data-bs-description');
     const id = button.getAttribute('data-post-id');
-
     const modalTitle = modal.querySelector('.modal-title');
     const modalBody = modal.querySelector('.modal-body');
     const modalFooter = modal.querySelector('.modal-footer');
@@ -143,7 +140,6 @@ const app = () => {
     modalBody.textContent = description;
 
     watchedState.openPost.push(id);
-    console.log(id);
   });
 };
 app();

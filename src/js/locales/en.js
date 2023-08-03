@@ -10,5 +10,9 @@ export default {
     incorrectURL: 'URL must be a valid URL',
     double: 'This URL has already been added',
     feedTitle: 'Feed',
+    postsTitles: 'Posts',
+    postButton: 'Read',
+    close: 'Close',
+    link: 'Read',
   },
 };

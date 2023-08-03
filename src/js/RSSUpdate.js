@@ -2,7 +2,7 @@ import aggregator from './aggregator';
 import _ from 'lodash';
 
 const update = (watchedState) => {
-  console.log(watchedState)
+  // console.log(watchedState)
   watchedState.feed.forEach((URL) =>
     aggregator(URL).then((result) => {
       const getCorrectFeed = (element) => element.link === URL;

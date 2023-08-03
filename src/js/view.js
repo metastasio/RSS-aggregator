@@ -4,25 +4,26 @@ import { renderRSSFeed, renderRSSPosts } from './renderRssFeed.js';
 const errorMessage = document.querySelector('.feedback');
 const interfaceLanguage = document.querySelectorAll('[data-i18n]');
 const sumbitButton = document.querySelector('#submitButton');
-// const input = document.querySelector('input');
+const input = document.querySelector('input');
 
 const langMap = { ru: 'en', eng: 'ru' };
 
 const render = (path, value, watchedState) => {
   if (path === 'errors') {
+
+
     errorMessage.textContent = value.message;
   } else if (path === 'state' && value === 'valid') {
-    errorMessage.textContent = value.message;
+    errorMessage.textContent = newInstance.t('success');
   } else if (path === 'lng') {
     newInstance.changeLanguage(langMap[value]).then((t) => {
       interfaceLanguage.forEach((item) => {
-        item.textContent = t(item.dataset.i18n);
+        item.textContent = newInstance.t(item.dataset.i18n);
       });
     });
   } else if (path === 'feedList') {
     renderRSSFeed(value);
   } else if (path === 'feedListItems' || path === 'openPost') {
-    console.log(watchedState.openPost);
     renderRSSPosts(watchedState.feedListItems);
     watchedState.openPost.forEach((item) => {
       const openedPost = document.querySelector(`[data-post-id="${item}"]`);
