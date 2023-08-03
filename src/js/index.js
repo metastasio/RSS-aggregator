@@ -41,7 +41,7 @@ const app = () => {
       .string(newInstance.t('incorrectURL'))
       .required(newInstance.t('empty'))
       .url(newInstance.t('incorrectURL'))
-      .notOneOf(watchedState.feed, newInstance.t('double')),
+      .oneOf(watchedState.feed, newInstance.t('double')),
   });
 
   const validate = (input) => {
@@ -60,11 +60,11 @@ const app = () => {
     const URL = formData.get('url');
     const objectData = Object.fromEntries(formData);
 
-
     const validation = validate(objectData);
     switch (_.isEmpty(validation)) {
       case true:
         watchedState.status = 'pending';
+        console.log(watchedState.feed);
         aggregator(URL)
           .then((result) => {
             if (result.message) {
@@ -73,11 +73,10 @@ const app = () => {
               watchedState.status = 'notSubmitted';
             } else {
               watchedState.feed.push(URL);
-              watchedState.state = 'valid';
               watchedState.status = 'notSubmitted';
+              watchedState.state = 'valid';
               const feedID = _.uniqueId();
               const { items, ...rest } = result;
-              console.log(watchedState);
               const formattedResult = {
                 ...rest,
                 id: feedID,
@@ -120,7 +119,6 @@ const app = () => {
     modalFooterLink.setAttribute('href', link);
     modalTitle.textContent = title;
     modalBody.textContent = description;
-
     watchedState.openPost.push(id);
   });
 };

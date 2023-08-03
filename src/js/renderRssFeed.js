@@ -3,7 +3,6 @@ import { newInstance } from './index.js';
 const renderRSSFeed = (state) => {
   const feedList = document.querySelector('#feedList');
   feedList.innerHTML = '';
-
   const div = document.createElement('div');
   div.classList.add('card-body');
   const h2 = document.createElement('h2');
@@ -14,7 +13,6 @@ const renderRSSFeed = (state) => {
   feedList.append(div);
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
-
   state.forEach((feed) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'border-0', 'border-end-0');
@@ -25,8 +23,7 @@ const renderRSSFeed = (state) => {
     const p = document.createElement('p');
     p.classList.add('m-0', 'small', 'text-black-50');
     p.textContent = feed.description;
-    li.append(h3);
-    li.append(p);
+    li.append(h3, p);
     ul.prepend(li);
     feedList.append(ul);
   });
