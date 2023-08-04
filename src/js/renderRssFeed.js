@@ -1,4 +1,4 @@
-import { newInstance } from './index.js';
+import newInstance from './locales/index.js';
 
 const renderRSSFeed = (state) => {
   const feedList = document.querySelector('#feedList');

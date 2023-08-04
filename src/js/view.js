@@ -1,4 +1,4 @@
-import { newInstance } from './index.js';
+import newInstance from './locales/index.js';
 import { renderRSSFeed, renderRSSPosts } from './renderRssFeed.js';
 
 const errorMessage = document.querySelector('.feedback');
@@ -15,6 +15,7 @@ const render = (path, value, watchedState) => {
       errorMessage.classList.remove('text-success');
       errorMessage.classList.add('text-danger');
       errorMessage.textContent = value.message;
+      break;
     case 'state':
       if (value === 'valid') {
         document.querySelector('form').reset();
@@ -25,15 +26,17 @@ const render = (path, value, watchedState) => {
         errorMessage.classList.add('text-success');
         errorMessage.textContent = newInstance.t('success');
       }
+      break;
     case 'lng':
-      newInstance.changeLanguage(langMap[value]).then((t) => {
+      newInstance.changeLanguage(langMap[value]).then(() => {
         interfaceLanguage.forEach((item) => {
           item.textContent = newInstance.t(item.dataset.i18n);
         });
       });
+      break;
     case 'feedList':
-      ////////////????????????????/////////////////////////
       renderRSSFeed(watchedState.feedList);
+      break;
     case 'feedListItems':
     case 'openPost':
       renderRSSPosts(watchedState.feedListItems);
@@ -42,10 +45,16 @@ const render = (path, value, watchedState) => {
         openedPost.classList.remove('fw-bold');
         openedPost.classList.add('fw-normal');
       });
+      break;
     case 'status':
-      value === 'pending'
-        ? sumbitButton.setAttribute('disabled', true)
-        : sumbitButton.removeAttribute('disabled');
+      if (value === 'pending') {
+        sumbitButton.setAttribute('disabled', true);
+      } else {
+        sumbitButton.removeAttribute('disabled');
+      }
+      break;
+    default:
+      break;
   }
 };
 

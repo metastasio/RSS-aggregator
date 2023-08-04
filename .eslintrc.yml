@@ -1,13 +1,8 @@
----
-plugins:
-  - jest
-
 env:
-  node: true
+  browser: true
 
 extends:
   - 'airbnb-base'
-  - 'plugin:jest/recommended'
 
 parserOptions:
   ecmaVersion: latest

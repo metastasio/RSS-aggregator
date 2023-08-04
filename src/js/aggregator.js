@@ -1,4 +1,4 @@
-import { newInstance } from './index.js';
+import newInstance from './locales/index.js';
 
 const parser = new DOMParser();
 
@@ -19,16 +19,18 @@ const aggregator = (url) => {
         return { message: newInstance.t('noRSS') };
       }
       const titleElement = parsed.querySelector('title');
-      const title = titleElement.textContent;
+      const feedTitle = titleElement.textContent;
       const descriptionElement = parsed.querySelector('description');
-      const description = descriptionElement.textContent;
+      const feedDescription = descriptionElement.textContent;
       const itemTags = parsed.querySelectorAll('item');
       const items = [...itemTags].map((item) => {
         const title = item.querySelector('title');
         const link = item.querySelector('link');
         const description = item.querySelector('description');
         return {
-          title: title.innerHTML,
+          title: title.innerHTML
+            .trim()
+            .replace(/^(\/\/\s*)?<!\[CDATA\[|(\/\/\s*)?\]\]>$/g, ''),
           link: link.innerHTML,
           description: description.innerHTML
             .trim()
@@ -37,11 +39,12 @@ const aggregator = (url) => {
       });
 
       return {
-        title,
-        description,
+        title: feedTitle,
+        description: feedDescription,
         link: url,
         items,
       };
     });
 };
+
 export default aggregator;
