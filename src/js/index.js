@@ -68,17 +68,22 @@ const app = () => {
               ...rest,
               id: feedID,
             };
-            watchedState.feedListItems = items.map((item) => {
-              return { ...item, feedID: feedID, postID: _.uniqueId() };
-            });
+            watchedState.feedListItems = items.map((item) => ({
+              ...item,
+              feedID,
+              postID: _.uniqueId(),
+            }));
             watchedState.feedList.push(formattedResult);
+            // eslint-disable-next-line no-unused-vars
             let timerId = setTimeout(function tick() {
               update(watchedState);
               timerId = setTimeout(tick, 5000);
             }, 5000);
           }
         })
-        .catch(() => (watchedState.errors = 'Network error'));
+        .catch(() => {
+          watchedState.errors = 'Network error';
+        });
     } else {
       console.log(validation, 'NOT EMPTY');
       watchedState.state = 'invalid';
@@ -96,7 +101,7 @@ const app = () => {
   });
 
   const modal = document.getElementById('modal');
-  modal.addEventListener('show.bs.modal', function (event) {
+  modal.addEventListener('show.bs.modal', (event) => {
     const button = event.relatedTarget;
     const title = button.getAttribute('data-bs-title');
     const link = button.getAttribute('data-bs-link');
