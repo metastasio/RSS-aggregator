@@ -37,8 +37,8 @@ const renderRSSPosts = ({ feedListItems: state, openPost }) => {
   div2.classList.add('card-body');
   const h2Posts = document.createElement('h2');
   h2Posts.classList.add('card-title', 'h4');
-  h2Posts.setAttribute('data-i18n', 'postsTitles');
-  h2Posts.textContent = newInstance.t('postsTitles');
+  h2Posts.setAttribute('data-i18n', 'postsTitle');
+  h2Posts.textContent = newInstance.t('postsTitle');
   div2.append(h2Posts);
   contentList.append(div2);
   const ul2 = document.createElement('ul');
@@ -60,7 +60,7 @@ const renderRSSPosts = ({ feedListItems: state, openPost }) => {
 
     const a = document.createElement('a');
     a.setAttribute('href', item.link);
-    a.classList.add(openPost.includes(item.postID) ? 'fw-normal' : 'fw-bold');
+    a.classList.add(openPost.includes(item.postID) ? 'fw-normal' : 'fw-bold',);
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
     a.textContent = item.title;

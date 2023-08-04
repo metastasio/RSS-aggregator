@@ -12,9 +12,10 @@ export default {
     empty: 'Не должно быть пустым',
     noRSS: 'Ресурс не содержит валидный RSS',
     feedTitle: 'Фиды',
-    postsTitles: 'Посты',
+    postsTitle: 'Посты',
     postButton: 'Просмотр',
     close: 'Закрыть',
     link: 'Читать полностью',
+    networkError: 'Ошибка сети',
   },
 };

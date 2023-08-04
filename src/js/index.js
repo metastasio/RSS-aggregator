@@ -87,7 +87,7 @@ const app = () => {
           }
         })
         .catch(() => {
-          watchedState.errors = 'Network error';
+          watchedState.errors = newInstance.t('networkError');
         });
       watchedState.state = '';
     } else {

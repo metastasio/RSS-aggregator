@@ -3,6 +3,7 @@ env:
 
 extends:
   - 'airbnb-base'
+  - 'prettier'
 
 parserOptions:
   ecmaVersion: latest
