@@ -24,13 +24,15 @@ const app = () => {
     render(path, value, watchedState);
   });
 
-  const schema = yup.object().shape({
-    url: yup
-      .string(newInstance.t('incorrectURL'))
-      .required(newInstance.t('empty'))
-      .url(newInstance.t('incorrectURL'))
-      .notOneOf(watchedState.feed, newInstance.t('double')),
-  });
+  const schema = yup.lazy(() =>
+    yup.object().shape({
+      url: yup
+        .string(newInstance.t('incorrectURL'))
+        .required(newInstance.t('empty'))
+        .url(newInstance.t('incorrectURL'))
+        .notOneOf(watchedState.feed, newInstance.t('double')),
+    }),
+  );
 
   const validate = (input) => {
     try {
@@ -69,11 +71,13 @@ const app = () => {
               ...rest,
               id: feedID,
             };
-            const updatedPosts = items.map((item) => ({
-              ...item,
-              feedID,
-              postID: _.uniqueId(),
-            })).reverse();
+            const updatedPosts = items
+              .map((item) => ({
+                ...item,
+                feedID,
+                postID: _.uniqueId(),
+              }))
+              .reverse();
             watchedState.feedListItems.push(...updatedPosts);
             watchedState.feedList.push(formattedResult);
             timerId = setTimeout(function tick() {
@@ -87,7 +91,6 @@ const app = () => {
         });
       watchedState.state = '';
     } else {
-      console.log(validation);
       watchedState.state = 'invalid';
       watchedState.errors = validation;
     }

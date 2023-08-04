@@ -17,7 +17,6 @@ const render = (path, value, watchedState) => {
       break;
     case 'state':
       if (value === 'valid') {
-        console.log(path, value, '!!!!!');
         document.querySelector('form').reset();
         input.focus();
         input.classList.remove('is-invalid');
