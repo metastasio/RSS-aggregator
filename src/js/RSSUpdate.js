@@ -11,11 +11,9 @@ const update = (watchedState) => {
         watchedState.feedListItems,
         'title',
       );
-      const newItems = filteredItems.map((item) => ({
-        ...item,
-        feedID: correctFeed.id,
-        postID: _.uniqueId(),
-      }));
+      const newItems = filteredItems.map((item) => {
+        return { ...item, feedID: correctFeed.id, postID: _.uniqueId() };
+      });
       watchedState.feedListItems.push(...newItems);
     }),
   );
