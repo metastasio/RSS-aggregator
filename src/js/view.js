@@ -18,6 +18,7 @@ const render = (path, value, watchedState) => {
       break;
     case 'state':
       if (value === 'valid') {
+        console.log(path, value, '!!!!!');
         document.querySelector('form').reset();
         input.focus();
         input.classList.remove('is-invalid');
@@ -30,7 +31,8 @@ const render = (path, value, watchedState) => {
     case 'lng':
       newInstance.changeLanguage(langMap[value]).then(() => {
         interfaceLanguage.forEach((item) => {
-          item.textContent = newInstance.t(item.dataset.i18n);
+          const lngItem = item;
+          lngItem.textContent = newInstance.t(item.dataset.i18n);
         });
       });
       break;

@@ -50,8 +50,8 @@ const app = () => {
 
     const validation = validate(objectData);
     if (_.isEmpty(validation)) {
+      console.log(validation, 'IS EMPTY');
       watchedState.status = 'pending';
-      console.log(watchedState.feed);
       aggregator(URL)
         .then((result) => {
           if (result.message) {
@@ -80,6 +80,7 @@ const app = () => {
         })
         .catch(() => (watchedState.errors = 'Network error'));
     } else {
+      console.log(validation, 'NOT EMPTY');
       watchedState.state = 'invalid';
       watchedState.errors = validation;
     }
