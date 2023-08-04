@@ -2,15 +2,14 @@ import newInstance from './locales/index.js';
 import { renderRSSFeed, renderRSSPosts } from './renderRssFeed.js';
 
 const errorMessage = document.querySelector('.feedback');
-const interfaceLanguage = document.querySelectorAll('[data-i18n]');
 const sumbitButton = document.querySelector('#submitButton');
 const input = document.querySelector('input');
 const langMap = { ru: 'ru', eng: 'en' };
 
 const render = (path, value, watchedState) => {
+  const interfaceLanguage = document.querySelectorAll('[data-i18n]');
   switch (path) {
     case 'errors':
-      input.classList.remove('is-valid');
       input.classList.add('is-invalid');
       errorMessage.classList.remove('text-success');
       errorMessage.classList.add('text-danger');
@@ -21,9 +20,9 @@ const render = (path, value, watchedState) => {
         document.querySelector('form').reset();
         input.focus();
         input.classList.remove('is-invalid');
-        input.classList.add('is-valid');
         errorMessage.classList.remove('text-danger');
         errorMessage.classList.add('text-success');
+        errorMessage.setAttribute('data-i18n', 'success');
         errorMessage.textContent = newInstance.t('success');
       }
       break;
@@ -39,12 +38,7 @@ const render = (path, value, watchedState) => {
       break;
     case 'feedListItems':
     case 'openPost':
-      renderRSSPosts(watchedState.feedListItems);
-      watchedState.openPost.forEach((item) => {
-        const openedPost = document.querySelector(`[data-post-id="${item}"]`);
-        openedPost.classList.remove('fw-bold');
-        openedPost.classList.add('fw-normal');
-      });
+      renderRSSPosts(watchedState);
       break;
     case 'status':
       if (value === 'pending') {
