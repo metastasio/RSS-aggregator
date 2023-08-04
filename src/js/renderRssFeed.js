@@ -29,7 +29,7 @@ const renderRSSFeed = (state) => {
   });
 };
 
-const renderRSSPosts = (state) => {
+const renderRSSPosts = ({ feedListItems: state, openPost }) => {
   const contentList = document.querySelector('#contentList');
   contentList.innerHTML = '';
 
@@ -54,10 +54,13 @@ const renderRSSPosts = (state) => {
       'border-0',
       'border-end-0',
     );
+    li2.addEventListener('click', () => {
+      openPost.push(item.postID);
+    });
+
     const a = document.createElement('a');
     a.setAttribute('href', item.link);
-    a.classList.add('fw-bold');
-    a.setAttribute('data-post-id', item.postID);
+    a.classList.add(openPost.includes(item.postID) ? 'fw-normal' : 'fw-bold');
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
     a.textContent = item.title;
@@ -65,7 +68,6 @@ const renderRSSPosts = (state) => {
     const button = document.createElement('button');
     button.setAttribute('type', 'button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    button.setAttribute('data-post-id', item.postID);
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
     button.setAttribute('data-i18n', 'postButton');

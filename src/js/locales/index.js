@@ -12,7 +12,7 @@ const newInstance = i18n.createInstance(
     },
   },
   (err) => {
-    if (err) return console.log('something went wrong loading', err);
+    console.log('something went wrong loading', err);
   },
 );
 

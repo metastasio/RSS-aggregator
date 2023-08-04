@@ -2,8 +2,8 @@ import newInstance from './locales/index.js';
 
 const parser = new DOMParser();
 
-const aggregator = (url) => {
-  return fetch(
+const aggregator = (url) =>
+  fetch(
     `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(
       url,
     )}`,
@@ -45,6 +45,4 @@ const aggregator = (url) => {
         items,
       };
     });
-};
-
 export default aggregator;

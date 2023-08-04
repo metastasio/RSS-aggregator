@@ -47,10 +47,11 @@ const app = () => {
     const formData = new FormData(e.target);
     const URL = formData.get('url');
     const objectData = Object.fromEntries(formData);
+    let timerId;
 
     const validation = validate(objectData);
     if (_.isEmpty(validation)) {
-      console.log(validation, 'IS EMPTY');
+      clearTimeout(timerId);
       watchedState.status = 'pending';
       aggregator(URL)
         .then((result) => {
@@ -68,19 +69,25 @@ const app = () => {
               ...rest,
               id: feedID,
             };
-            watchedState.feedListItems = items.map((item) => {
-              return { ...item, feedID: feedID, postID: _.uniqueId() };
-            });
+            const updatedPosts = items.map((item) => ({
+              ...item,
+              feedID,
+              postID: _.uniqueId(),
+            })).reverse();
+            watchedState.feedListItems.push(...updatedPosts);
             watchedState.feedList.push(formattedResult);
-            let timerId = setTimeout(function tick() {
+            timerId = setTimeout(function tick() {
               update(watchedState);
               timerId = setTimeout(tick, 5000);
             }, 5000);
           }
         })
-        .catch(() => (watchedState.errors = 'Network error'));
+        .catch(() => {
+          watchedState.errors = 'Network error';
+        });
+      watchedState.state = '';
     } else {
-      console.log(validation, 'NOT EMPTY');
+      console.log(validation);
       watchedState.state = 'invalid';
       watchedState.errors = validation;
     }
@@ -96,12 +103,11 @@ const app = () => {
   });
 
   const modal = document.getElementById('modal');
-  modal.addEventListener('show.bs.modal', function (event) {
+  modal.addEventListener('show.bs.modal', (event) => {
     const button = event.relatedTarget;
     const title = button.getAttribute('data-bs-title');
     const link = button.getAttribute('data-bs-link');
     const description = button.getAttribute('data-bs-description');
-    const id = button.getAttribute('data-post-id');
     const modalTitle = modal.querySelector('.modal-title');
     const modalBody = modal.querySelector('.modal-body');
     const modalFooter = modal.querySelector('.modal-footer');
@@ -109,7 +115,6 @@ const app = () => {
     modalFooterLink.setAttribute('href', link);
     modalTitle.textContent = title;
     modalBody.textContent = description;
-    watchedState.openPost.push(id);
   });
 };
 app();
