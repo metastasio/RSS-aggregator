@@ -24,15 +24,13 @@ const app = () => {
     render(path, value, watchedState);
   });
 
-  const schema = yup.lazy(() =>
-    yup.object().shape({
-      url: yup
-        .string(newInstance.t('incorrectURL'))
-        .required(newInstance.t('empty'))
-        .url(newInstance.t('incorrectURL'))
-        .notOneOf(watchedState.feed, newInstance.t('double')),
-    }),
-  );
+  const schema = yup.lazy(() => yup.object().shape({
+    url: yup
+      .string(newInstance.t('incorrectURL'))
+      .required(newInstance.t('empty'))
+      .url(newInstance.t('incorrectURL'))
+      .notOneOf(watchedState.feed, newInstance.t('double')),
+  }));
 
   const validate = (input) => {
     try {
@@ -55,40 +53,36 @@ const app = () => {
     if (_.isEmpty(validation)) {
       clearTimeout(timerId);
       watchedState.status = 'pending';
-      aggregator(URL)
-        .then((result) => {
-          if (result.message) {
-            watchedState.errors = result;
-            watchedState.state = 'invalid';
-            watchedState.status = '';
-          } else {
-            watchedState.feed.push(URL);
-            watchedState.status = '';
-            watchedState.state = 'valid';
-            const feedID = _.uniqueId();
-            const { items, ...rest } = result;
-            const formattedResult = {
-              ...rest,
-              id: feedID,
-            };
-            const updatedPosts = items
-              .map((item) => ({
-                ...item,
-                feedID,
-                postID: _.uniqueId(),
-              }))
-              .reverse();
-            watchedState.feedListItems.push(...updatedPosts);
-            watchedState.feedList.push(formattedResult);
-            timerId = setTimeout(function tick() {
-              update(watchedState);
-              timerId = setTimeout(tick, 5000);
-            }, 5000);
-          }
-        })
-        // .catch(() => {
-        //   watchedState.errors = newInstance.t('networkError');
-        // });
+      aggregator(URL).then((result) => {
+        if (result.message) {
+          watchedState.errors = result;
+          watchedState.state = 'invalid';
+          watchedState.status = '';
+        } else {
+          watchedState.feed.push(URL);
+          watchedState.status = '';
+          watchedState.state = 'valid';
+          const feedID = _.uniqueId();
+          const { items, ...rest } = result;
+          const formattedResult = {
+            ...rest,
+            id: feedID,
+          };
+          const updatedPosts = items
+            .map((item) => ({
+              ...item,
+              feedID,
+              postID: _.uniqueId(),
+            }))
+            .reverse();
+          watchedState.feedListItems.push(...updatedPosts);
+          watchedState.feedList.push(formattedResult);
+          timerId = setTimeout(function tick() {
+            update(watchedState);
+            timerId = setTimeout(tick, 5000);
+          }, 5000);
+        }
+      });
       watchedState.state = '';
     } else {
       watchedState.state = 'invalid';

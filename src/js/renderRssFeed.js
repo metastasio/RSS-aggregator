@@ -60,7 +60,7 @@ const renderRSSPosts = ({ feedListItems: state, openPost }) => {
 
     const a = document.createElement('a');
     a.setAttribute('href', item.link);
-    a.classList.add(openPost.includes(item.postID) ? 'fw-normal' : 'fw-bold',);
+    a.classList.add(openPost.includes(item.postID) ? 'fw-normal' : 'fw-bold');
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
     a.textContent = item.title;

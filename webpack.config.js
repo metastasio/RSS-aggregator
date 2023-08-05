@@ -3,7 +3,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const isProduction = process.env.NODE_ENV == 'production';
+const isProduction = process.env.NODE_ENV === 'production';
 
 const config = {
   entry: './src/js/index.js',
@@ -57,9 +57,7 @@ const config = {
             // Loader for webpack to process CSS with PostCSS
             loader: 'postcss-loader',
             options: {
-              postcssOptions: {
-                plugins: () => [autoprefixer],
-              },
+              postcssOptions: {},
             },
           },
           {
