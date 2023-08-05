@@ -86,9 +86,9 @@ const app = () => {
             }, 5000);
           }
         })
-        .catch(() => {
-          watchedState.errors = newInstance.t('networkError');
-        });
+        // .catch(() => {
+        //   watchedState.errors = newInstance.t('networkError');
+        // });
       watchedState.state = '';
     } else {
       watchedState.state = 'invalid';

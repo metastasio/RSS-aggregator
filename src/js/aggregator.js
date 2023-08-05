@@ -1,19 +1,22 @@
+import axios from 'axios';
 import newInstance from './locales/index.js';
 
 const parser = new DOMParser();
 
 const aggregator = (url) =>
-  fetch(
-    `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(
-      url,
-    )}`,
-  )
-    .then((response) => {
-      if (response.ok) return response.json();
-      throw new Error('Network response was not ok.');
-    })
-    .then((data) => {
-      const parsed = parser.parseFromString(data.contents, 'application/xml');
+  axios
+    .get(
+      `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(
+        url,
+      )}`,
+      { timeout: 5000 },
+    )
+    // .then((response) => {
+      //   if (response.ok) return response.json();
+      //   throw new Error('Network response was not ok.');
+      // })
+      .then((data) => {
+        const parsed = parser.parseFromString(data.data.contents, 'application/xml');
 
       if (parsed.querySelector('parsererror')) {
         return { message: newInstance.t('noRSS') };
@@ -44,5 +47,6 @@ const aggregator = (url) =>
         link: url,
         items,
       };
-    });
+    })
+    .catch(() => ({ message: newInstance.t('networkError') }));
 export default aggregator;
