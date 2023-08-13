@@ -1,7 +1,6 @@
 import axios from 'axios';
 import newInstance from './locales/index.js';
-
-const parser = new DOMParser();
+import rssParser from './parser.js';
 
 const aggregator = (url) => axios
   .get(
@@ -10,41 +9,6 @@ const aggregator = (url) => axios
     )}`,
     { timeout: 5000 },
   )
-  .then((data) => {
-    const parsed = parser.parseFromString(
-      data.data.contents,
-      'application/xml',
-    );
-
-    if (parsed.querySelector('parsererror')) {
-      return { message: newInstance.t('noRSS') };
-    }
-    const titleElement = parsed.querySelector('title');
-    const feedTitle = titleElement.textContent;
-    const descriptionElement = parsed.querySelector('description');
-    const feedDescription = descriptionElement.textContent;
-    const itemTags = parsed.querySelectorAll('item');
-    const items = [...itemTags].map((item) => {
-      const title = item.querySelector('title');
-      const link = item.querySelector('link');
-      const description = item.querySelector('description');
-      return {
-        title: title.innerHTML
-          .trim()
-          .replace(/^(\/\/\s*)?<!\[CDATA\[|(\/\/\s*)?\]\]>$/g, ''),
-        link: link.innerHTML,
-        description: description.innerHTML
-          .trim()
-          .replace(/^(\/\/\s*)?<!\[CDATA\[|(\/\/\s*)?\]\]>$/g, ''),
-      };
-    });
-
-    return {
-      title: feedTitle,
-      description: feedDescription,
-      link: url,
-      items,
-    };
-  })
+  .then((data) => rssParser(data, url))
   .catch(() => ({ message: newInstance.t('networkError') }));
 export default aggregator;
