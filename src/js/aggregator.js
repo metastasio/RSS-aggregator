@@ -11,9 +11,8 @@ const getLink = (url) => {
   return resultUrl;
 };
 
-const aggregator = (url) =>
-  axios
-    .get(getLink(url), { timeout: 5000 })
-    .then((data) => rssParser(data, url))
-    .catch(() => ({ message: newInstance.t('networkError') }));
+const aggregator = (url) => axios
+  .get(getLink(url), { timeout: 5000 })
+  .then((data) => rssParser(data, url))
+  .catch(() => ({ message: newInstance.t('networkError') }));
 export default aggregator;
