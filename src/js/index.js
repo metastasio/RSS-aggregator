@@ -14,6 +14,14 @@ const elements = {
   modal: document.getElementById('modal'),
 };
 
+(() => {
+  const locales = document.querySelectorAll('[data-i18n]');
+  locales.forEach((locale) => {
+    const initialLocale = locale;
+    initialLocale.textContent = newInstance.t(locale.dataset.i18n);
+  });
+})();
+
 const app = () => {
   const state = {
     status: '',
