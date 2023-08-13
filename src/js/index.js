@@ -44,7 +44,7 @@ const app = () => {
       .required(newInstance.t('empty'))
       .url(newInstance.t('incorrectURL'))
       .notOneOf(watchedState.feed, newInstance.t('double')),
-    }));
+  }));
 
   const validate = (input) => {
     try {
