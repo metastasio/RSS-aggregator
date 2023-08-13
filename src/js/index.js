@@ -8,6 +8,12 @@ import aggregator from './aggregator.js';
 import update from './RSSUpdate.js';
 import newInstance from './locales/index.js';
 
+const elements = {
+  form: document.querySelector('form'),
+  lngButton: document.querySelector('#lng'),
+  modal: document.getElementById('modal'),
+};
+
 const app = () => {
   const state = {
     status: '',
@@ -24,13 +30,15 @@ const app = () => {
     render(path, value, watchedState);
   });
 
-  const schema = yup.lazy(() => yup.object().shape({
-    url: yup
-      .string(newInstance.t('incorrectURL'))
-      .required(newInstance.t('empty'))
-      .url(newInstance.t('incorrectURL'))
-      .notOneOf(watchedState.feed, newInstance.t('double')),
-  }));
+  const schema = yup.lazy(() =>
+    yup.object().shape({
+      url: yup
+        .string(newInstance.t('incorrectURL'))
+        .required(newInstance.t('empty'))
+        .url(newInstance.t('incorrectURL'))
+        .notOneOf(watchedState.feed, newInstance.t('double')),
+    }),
+  );
 
   const validate = (input) => {
     try {
@@ -41,8 +49,7 @@ const app = () => {
     }
   };
 
-  const form = document.querySelector('form');
-  form.addEventListener('submit', (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const URL = formData.get('url');
@@ -90,8 +97,7 @@ const app = () => {
     }
   });
 
-  const lngButton = document.querySelector('#lng');
-  lngButton.addEventListener('click', () => {
+  elements.lngButton.addEventListener('click', () => {
     if (watchedState.lng === 'eng') {
       watchedState.lng = 'ru';
     } else {
@@ -99,15 +105,14 @@ const app = () => {
     }
   });
 
-  const modal = document.getElementById('modal');
-  modal.addEventListener('show.bs.modal', (event) => {
+  elements.modal.addEventListener('show.bs.modal', (event) => {
     const button = event.relatedTarget;
     const title = button.getAttribute('data-bs-title');
     const link = button.getAttribute('data-bs-link');
     const description = button.getAttribute('data-bs-description');
-    const modalTitle = modal.querySelector('.modal-title');
-    const modalBody = modal.querySelector('.modal-body');
-    const modalFooter = modal.querySelector('.modal-footer');
+    const modalTitle = elements.modal.querySelector('.modal-title');
+    const modalBody = elements.modal.querySelector('.modal-body');
+    const modalFooter = elements.modal.querySelector('.modal-footer');
     const modalFooterLink = modalFooter.querySelector('a');
     modalFooterLink.setAttribute('href', link);
     modalTitle.textContent = title;
