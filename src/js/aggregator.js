@@ -3,11 +3,9 @@ import newInstance from './locales/index.js';
 import rssParser from './parser.js';
 
 const getLink = (url) => {
-  const resultUrl = new URL(
-    `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(
-      url,
-    )}`,
-  );
+  const resultUrl = new URL('https://allorigins.hexlet.app/get');
+  resultUrl.searchParams.set('disableCache', 'true');
+  resultUrl.searchParams.set('url', url);
   return resultUrl;
 };
 

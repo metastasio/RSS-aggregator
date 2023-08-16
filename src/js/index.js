@@ -8,21 +8,22 @@ import aggregator from './aggregator.js';
 import update from './RSSUpdate.js';
 import newInstance from './locales/index.js';
 
-const elements = {
-  form: document.querySelector('form'),
-  lngButton: document.querySelector('#lng'),
-  modal: document.getElementById('modal'),
-};
-
-(() => {
-  const locales = document.querySelectorAll('[data-i18n]');
-  locales.forEach((locale) => {
-    const initialLocale = locale;
-    initialLocale.textContent = newInstance.t(locale.dataset.i18n);
-  });
-})();
 
 const app = () => {
+  const elements = {
+    form: document.querySelector('form'),
+    lngButton: document.querySelector('#lng'),
+    modal: document.getElementById('modal'),
+  };
+  
+  (() => {
+    const locales = document.querySelectorAll('[data-i18n]');
+    locales.forEach((locale) => {
+      const initialLocale = locale;
+      initialLocale.textContent = newInstance.t(locale.dataset.i18n);
+    });
+  })();
+  
   const state = {
     status: '',
     feed: [],
