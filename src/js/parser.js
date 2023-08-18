@@ -1,4 +1,4 @@
-import newInstance from './locales/index.js';
+import { newInstance } from './locales/index.js';
 
 const parser = new DOMParser();
 

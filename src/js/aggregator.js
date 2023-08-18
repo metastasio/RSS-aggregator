@@ -1,5 +1,5 @@
 import axios from 'axios';
-import newInstance from './locales/index.js';
+import { newInstance } from './locales/index.js';
 import rssParser from './parser.js';
 
 const getLink = (url) => {

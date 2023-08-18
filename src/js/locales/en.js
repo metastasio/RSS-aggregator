@@ -5,7 +5,7 @@ export default {
     header: 'RSS aggregator',
     desc: 'Start reading RSS today!',
     placeholder: 'RSS link',
-    example: 'Example: https://buzzfeed.com/world.xml',
+    example: 'Example: https://aljazeera.com/xml/rss/all.xml',
     success: 'RSS was added to the list',
     incorrectURL: 'URL must be a valid URL',
     double: 'This URL has already been added',

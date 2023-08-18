@@ -6,24 +6,18 @@ import _ from 'lodash';
 import render from './view.js';
 import aggregator from './aggregator.js';
 import update from './RSSUpdate.js';
-import newInstance from './locales/index.js';
-
+import { newInstance, setLocales } from './locales/index.js';
+import elements from './elements.js';
 
 const app = () => {
-  const elements = {
-    form: document.querySelector('form'),
-    lngButton: document.querySelector('#lng'),
-    modal: document.getElementById('modal'),
-  };
-  
-  (() => {
-    const locales = document.querySelectorAll('[data-i18n]');
-    locales.forEach((locale) => {
-      const initialLocale = locale;
-      initialLocale.textContent = newInstance.t(locale.dataset.i18n);
-    });
-  })();
-  
+  // const setLocales = () => {
+  //   elements.getInterfaceLanguages().forEach((locale) => {
+  //     const initialLocale = locale;
+  //     initialLocale.textContent = newInstance.t(locale.dataset.i18n);
+  //   });
+  // };
+  setLocales();
+
   const state = {
     status: '',
     feed: [],
@@ -39,13 +33,21 @@ const app = () => {
     render(path, value, watchedState);
   });
 
-  const schema = yup.lazy(() => yup.object().shape({
-    url: yup
-      .string(newInstance.t('incorrectURL'))
-      .required(newInstance.t('empty'))
-      .url(newInstance.t('incorrectURL'))
-      .notOneOf(watchedState.feed, newInstance.t('double')),
-  }));
+  // eslint-disable-next-line no-unused-vars
+  let timerId = setTimeout(function tick() {
+    update(watchedState);
+    timerId = setTimeout(tick, 5000);
+  }, 5000);
+
+  const schema = yup.lazy(() =>
+    yup.object().shape({
+      url: yup
+        .string(newInstance.t('incorrectURL'))
+        .required(newInstance.t('empty'))
+        .url(newInstance.t('incorrectURL'))
+        .notOneOf(watchedState.feed, newInstance.t('double')),
+    }),
+  );
 
   const validate = (input) => {
     try {
@@ -61,11 +63,9 @@ const app = () => {
     const formData = new FormData(e.target);
     const URL = formData.get('url');
     const objectData = Object.fromEntries(formData);
-    let timerId;
 
     const validation = validate(objectData);
     if (_.isEmpty(validation)) {
-      clearTimeout(timerId);
       watchedState.status = 'pending';
       aggregator(URL).then((result) => {
         if (result.message) {
@@ -91,10 +91,6 @@ const app = () => {
             .reverse();
           watchedState.feedListItems.push(...updatedPosts);
           watchedState.feedList.push(formattedResult);
-          timerId = setTimeout(function tick() {
-            update(watchedState);
-            timerId = setTimeout(tick, 5000);
-          }, 5000);
         }
       });
       watchedState.state = '';
@@ -127,3 +123,4 @@ const app = () => {
   });
 };
 app();
+export default setLocales;

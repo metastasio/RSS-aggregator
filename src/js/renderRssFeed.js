@@ -1,8 +1,8 @@
-import newInstance from './locales/index.js';
+import { newInstance } from './locales/index.js';
+import elements from './elements.js';
 
 const renderRSSFeed = (state) => {
-  const feedList = document.querySelector('#feedList');
-  feedList.innerHTML = '';
+  elements.feedList.innerHTML = '';
   const div = document.createElement('div');
   div.classList.add('card-body');
   const h2 = document.createElement('h2');
@@ -10,7 +10,7 @@ const renderRSSFeed = (state) => {
   h2.setAttribute('data-i18n', 'feedTitle');
   h2.textContent = newInstance.t('feedTitle');
   div.append(h2);
-  feedList.append(div);
+  elements.feedList.append(div);
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
   state.forEach((feed) => {
@@ -25,13 +25,12 @@ const renderRSSFeed = (state) => {
     p.textContent = feed.description;
     li.append(h3, p);
     ul.prepend(li);
-    feedList.append(ul);
+    elements.feedList.append(ul);
   });
 };
 
 const renderRSSPosts = ({ feedListItems: state, openPost }) => {
-  const contentList = document.querySelector('#contentList');
-  contentList.innerHTML = '';
+  elements.contentList.innerHTML = '';
 
   const div2 = document.createElement('div');
   div2.classList.add('card-body');
@@ -40,7 +39,7 @@ const renderRSSPosts = ({ feedListItems: state, openPost }) => {
   h2Posts.setAttribute('data-i18n', 'postsTitle');
   h2Posts.textContent = newInstance.t('postsTitle');
   div2.append(h2Posts);
-  contentList.append(div2);
+  elements.contentList.append(div2);
   const ul2 = document.createElement('ul');
   ul2.classList.add('list-group', 'border-0', 'rounded-0');
 
@@ -77,7 +76,7 @@ const renderRSSPosts = ({ feedListItems: state, openPost }) => {
     button.textContent = newInstance.t('postButton');
     li2.append(button);
     ul2.prepend(li2);
-    contentList.append(ul2);
+    elements.contentList.append(ul2);
   });
 };
 export { renderRSSFeed, renderRSSPosts };

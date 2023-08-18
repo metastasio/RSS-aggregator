@@ -5,7 +5,7 @@ export default {
     header: 'RSS агрегатор',
     desc: 'Начните читать RSS сегодня!',
     placeholder: 'RSS-ссылка',
-    example: 'Пример: http://www.fontanka.ru/fontanka.rss',
+    example: 'Пример: https://aljazeera.com/xml/rss/all.xml',
     success: 'RSS успешно загружен',
     incorrectURL: 'Ссылка должна быть валидным URL',
     double: 'RSS уже существует',
