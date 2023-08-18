@@ -10,7 +10,6 @@ import { newInstance, setLocales } from './locales/index.js';
 import elements from './elements.js';
 
 const app = () => {
-
   setLocales();
 
   const state = {
