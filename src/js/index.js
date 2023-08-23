@@ -34,15 +34,13 @@ const app = () => {
     timerId = setTimeout(tick, 5000);
   }, 5000);
 
-  const schema = yup.lazy(() =>
-    yup.object().shape({
-      url: yup
-        .string(newInstance.t('incorrectURL'))
-        .required(newInstance.t('empty'))
-        .url(newInstance.t('incorrectURL'))
-        .notOneOf(watchedState.feed, newInstance.t('double')),
-    }),
-  );
+  const schema = yup.lazy(() => yup.object().shape({
+    url: yup
+      .string(newInstance.t('incorrectURL'))
+      .required(newInstance.t('empty'))
+      .url(newInstance.t('incorrectURL'))
+      .notOneOf(watchedState.feed, newInstance.t('double')),
+  }));
 
   const validate = (input) => {
     try {
