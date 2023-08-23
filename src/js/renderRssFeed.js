@@ -53,9 +53,7 @@ const renderRSSPosts = ({ feedListItems: state, openPost }) => {
       'border-0',
       'border-end-0',
     );
-    li2.addEventListener('click', () => {
-      openPost.push(item.postID);
-    });
+    li2.setAttribute('data-postId', item.postID);
 
     const a = document.createElement('a');
     a.setAttribute('href', item.link);

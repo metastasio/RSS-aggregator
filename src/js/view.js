@@ -33,6 +33,17 @@ const render = (path, value, watchedState) => {
     case 'openPost':
       renderRSSPosts(watchedState);
       break;
+    case 'modalWindow': {
+      const { title, link, description } = watchedState.modalWindow;
+      const modalTitle = elements.modal.querySelector('.modal-title');
+      const modalBody = elements.modal.querySelector('.modal-body');
+      const modalFooter = elements.modal.querySelector('.modal-footer');
+      const modalFooterLink = modalFooter.querySelector('a');
+      modalFooterLink.setAttribute('href', link);
+      modalTitle.textContent = title;
+      modalBody.textContent = description;
+      break;
+    }
     case 'status':
       if (value === 'pending') {
         elements.sumbitButton.setAttribute('disabled', true);

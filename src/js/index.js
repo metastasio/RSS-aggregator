@@ -21,6 +21,7 @@ const app = () => {
     feedList: [],
     feedListItems: [],
     openPost: [],
+    modalWindow: {},
   };
 
   const watchedState = onChange(state, (path, value) => {
@@ -33,13 +34,15 @@ const app = () => {
     timerId = setTimeout(tick, 5000);
   }, 5000);
 
-  const schema = yup.lazy(() => yup.object().shape({
-    url: yup
-      .string(newInstance.t('incorrectURL'))
-      .required(newInstance.t('empty'))
-      .url(newInstance.t('incorrectURL'))
-      .notOneOf(watchedState.feed, newInstance.t('double')),
-  }));
+  const schema = yup.lazy(() =>
+    yup.object().shape({
+      url: yup
+        .string(newInstance.t('incorrectURL'))
+        .required(newInstance.t('empty'))
+        .url(newInstance.t('incorrectURL'))
+        .notOneOf(watchedState.feed, newInstance.t('double')),
+    }),
+  );
 
   const validate = (input) => {
     try {
@@ -100,18 +103,17 @@ const app = () => {
     }
   });
 
-  elements.modal.addEventListener('show.bs.modal', (event) => {
-    const button = event.relatedTarget;
-    const title = button.getAttribute('data-bs-title');
-    const link = button.getAttribute('data-bs-link');
-    const description = button.getAttribute('data-bs-description');
-    const modalTitle = elements.modal.querySelector('.modal-title');
-    const modalBody = elements.modal.querySelector('.modal-body');
-    const modalFooter = elements.modal.querySelector('.modal-footer');
-    const modalFooterLink = modalFooter.querySelector('a');
-    modalFooterLink.setAttribute('href', link);
-    modalTitle.textContent = title;
-    modalBody.textContent = description;
+  elements.contentList.addEventListener('click', (e) => {
+    if (e.target.nodeName === 'BUTTON') {
+      const button = e.target;
+      watchedState.modalWindow = {
+        title: button.getAttribute('data-bs-title'),
+        link: button.getAttribute('data-bs-link'),
+        description: button.getAttribute('data-bs-description'),
+      };
+    }
+    const getOpenPost = e.target.closest('li');
+    watchedState.openPost.push(getOpenPost.getAttribute('data-postId'));
   });
 };
 app();
